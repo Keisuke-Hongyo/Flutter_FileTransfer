@@ -1,4 +1,4 @@
-# filetransfer For Android First Version
+# Filetransfer For Android First Version
 gRPCを使用して端末間で、ファイルのやり取りをするためのアプリです。
 とりあえずは、ファイルのやり取りができるようにしました。
 
