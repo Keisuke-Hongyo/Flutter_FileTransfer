@@ -1,8 +1,16 @@
+/* File Transfer App for android       */
+/* Programed by Keisuke Hongyo         */
+/* First Version Date 18.Mar 2023      */
+/* Supported by Yukinko and Double SH  */
+
+// Flutter Standard Library
 import 'dart:async';
 import 'dart:typed_data';
 
+// Package
 import 'package:grpc/grpc.dart';
 
+// My Library
 import '../gRPC/fileTrans.pb.dart';
 import '../gRPC/fileTrans.pbgrpc.dart';
 
