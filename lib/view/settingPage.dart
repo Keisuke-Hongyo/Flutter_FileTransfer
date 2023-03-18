@@ -20,9 +20,10 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Main Pageから値を受け取り
     List<String> arg = ModalRoute.of(context)!.settings.arguments as List<String>;
-    _ipaddr = arg[0];
-    _port = arg[1];
+    _ipaddr = arg[0];   // IP Address or Host Name
+    _port = arg[1];     // Port Number
 
     return Scaffold(
       resizeToAvoidBottomInset: false,  // キーボード表示時のエラー回避
