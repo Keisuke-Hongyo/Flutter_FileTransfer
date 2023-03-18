@@ -1,3 +1,8 @@
+/* File Transfer App for android       */
+/* Programed by Keisuke Hongyo         */
+/* First Version Date 18.Mar 2023      */
+/* Supported by Yukinko and Double SH  */
+
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -25,6 +30,7 @@ class MyApp extends StatelessWidget {
         ),
         home: const MyHomePage(title: 'File Transfer Main Page!'),
         routes: <String, WidgetBuilder>{
+          // ページルーティングの設定
           '/setting': (BuildContext context) => SettingPage(),
         });
   }
@@ -40,6 +46,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  // gRPCサーバ、クライアントの設定
   FileSaveSrv srv = FileSaveSrv(port: 50052);
   FileTransfer ft = FileTransfer(address: "localhost", port: 50052);
 
@@ -65,12 +73,14 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
+  // 終了処理
   @override
   void dispose() async {
     await srv.stopServer();
     super.dispose();
   }
 
+  // 表示
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   /* 表示用Widget */
-  // サーバ表示用
+  // サーバ情報表示用
   Widget serverInfo() {
     String srvMsg = "";
     return Padding(
@@ -231,6 +241,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  // 接続先表示用
   Widget clientInfo() {
     String cliMsg = "";
     return Padding(
@@ -317,6 +328,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  // ファイル等の情報を表示
   Widget fileCardInfo() {
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -354,6 +366,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  // ボタン処理関係
   Widget ButtonProc() {
     return Row(
       children: [
