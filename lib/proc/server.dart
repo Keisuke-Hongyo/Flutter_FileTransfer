@@ -9,6 +9,9 @@ import 'dart:io';
 
 // Package
 import 'package:external_path/external_path.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:grpc/grpc.dart';
 
 // My Library
@@ -16,6 +19,67 @@ import '../gRPC/fileTrans.pbgrpc.dart';
 
 // Server Message Stream
 final StreamController<String> _srvmsg = StreamController<String>.broadcast();
+
+
+class ServerSettingPage extends StatelessWidget {
+  //final FileTransfer client;
+  late String _port;
+
+  void changePort(String value) {
+    _port = value;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String arg = ModalRoute.of(context)!.settings.arguments as String;
+    _port = arg;
+    _srvmsg.sink.add("");
+    return Scaffold(
+      resizeToAvoidBottomInset: false,  // キーボード表示時のエラー回避
+      appBar: AppBar(
+        title: const Text("受信ポートの設定"),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0, left: 20.0),
+            child: SizedBox(
+                height: 120,
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      '受信ポート設定',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    Flexible(
+                      child: TextField(
+                        controller: TextEditingController(text: _port),
+                        keyboardType: TextInputType.number,
+                        onChanged: changePort,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],),
+                    ),
+                  ],
+                )),
+          ),
+          ElevatedButton(
+              onPressed: () {
+                _srvmsg.sink.add("受信ポートを変更しました。");
+                Navigator.pop(context,_port);
+              },
+              child: const Text("ポート番号 変更")),
+        ],
+      ),
+    );
+  }
+}
 
 // ファイルサーバの設定
 class FileSaveSrv {

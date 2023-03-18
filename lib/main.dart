@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 
 import 'proc/client.dart';
 import 'proc/server.dart';
-import 'view/settingPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +30,8 @@ class MyApp extends StatelessWidget {
         home: const MyHomePage(title: 'File Transfer Main Page!'),
         routes: <String, WidgetBuilder>{
           // ページルーティングの設定
-          '/setting': (BuildContext context) => SettingPage(),
+          '/client_setting': (BuildContext context) => ClientSettingPage(),
+          '/server_setting': (BuildContext context) => ServerSettingPage(),
         });
   }
 }
@@ -46,7 +46,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   // gRPCサーバ、クライアントの設定
   FileSaveSrv srv = FileSaveSrv(port: 50052);
   FileTransfer ft = FileTransfer(address: "localhost", port: 50052);
@@ -56,6 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String ipAddress = "None";
   int port = 50051;
   String msg = "";
+
+  var menu = ["受信ポート設定", "転送先設定"];
 
   // 初期化
   @override
@@ -84,26 +85,49 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,  // キーボード表示時のエラー回避
+      resizeToAvoidBottomInset: false, // キーボード表示時のエラー回避
       appBar: AppBar(
         title: const Text("File Transfer---!"),
         actions: [
-          GestureDetector(
-            child: const Padding(
-              padding: EdgeInsets.only(right: 10.0),
-              child: Icon(Icons.settings),
-            ),
-            onTap: () async {
-              final settingPage = await Navigator.pushNamed(
-                  context, '/setting',
-                  arguments: [ft.address,ft.port.toString()]
-              ) as List<String>;
-              setState(() {
-                ft.address = settingPage[0];
-                ft.port = int.parse(settingPage[1]);
-              });
-            },
-          ),
+          PopupMenuButton<String>(
+              initialValue: menu[0],
+              onSelected: (String selectMenu) async {
+                switch (selectMenu) {
+                  case '転送先設定':
+                    final settingPage = await Navigator.pushNamed(
+                            context, '/client_setting',
+                            arguments: [ft.address, ft.port.toString()])
+                        as List<String>;
+                    setState(() {
+                      ft.address = settingPage[0];
+                      ft.port = int.parse(settingPage[1]);
+                    });
+                    break;
+                  case '受信ポート設定':
+                    // サーバ停止
+                    srv.stopServer();
+                    // 受信ポート設定変更
+                    final serverPort = await Navigator.pushNamed(
+                        context, '/server_setting',
+                        arguments: srv.port.toString()) as String;
+                    setState(() {
+                      srv.port = int.parse(serverPort);
+                      port = srv.port;
+                    });
+                    srv.setServer();
+                    break;
+                  default:
+                    break;
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return menu.map((String s) {
+                  return PopupMenuItem(
+                    value: s,
+                    child: Text(s),
+                  );
+                }).toList();
+              }),
         ],
       ),
       body: Column(
