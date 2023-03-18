@@ -1,16 +1,8 @@
-# filetransfer
+# filetransfer For Android First Version
+gRPCを使用して端末間で、ファイルのやり取りをするためのアプリです。
+とりあえずは、ファイルのやり取りができるようにしました。
 
-File Transfer Test Program
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 使い方
+アプリをインストールし、接続したい相手を登録
+ファイルを選択して、アップロード。
+内部でサーバも起動しているので、受信も可能
